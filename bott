@@ -1,0 +1,248 @@
+
+import numpy as np
+import math
+import exceptional as exc
+
+def emptylist(length):
+	e = [];
+	for i in range(length):
+		e.append(0)
+	return e
+
+def rho(length):
+    e = [];
+    for i in range(length):
+        e.append(1)
+    return e
+
+
+
+def stand(k, n):
+	e = [];
+	if k > n:
+		print('stand error: incompatible arguments')
+	else:
+		for i in range(n):
+			if i == k-1:
+				e.append(1)
+			else:
+				e.append(0)
+		return np.array(e)
+
+
+def trim(vector, min, max):
+	result = emptylist(max - min)
+	for i in range(max - min):
+		result[i] = vector[min + i]
+	return result
+
+
+def cartan(type, rank):
+	if rank <= 0:
+		print('rank must be positive')
+	else:
+		A = np.zeros([rank, rank]);
+		for i in range(rank):
+			for j in range(rank):
+				if i==j:
+					A[i,j] = 2
+				elif i == j+1:
+					A[i,j] = -1
+				elif i == j-1:
+					A[i,j] = -1
+				else:
+					A[i,j] = 0
+		if type == 'A':
+			return A
+		elif type == 'D':
+			D = A;
+			D[rank-1, rank-3] = -1;
+			D[rank-3, rank-1] = -1;
+			D[rank-1, rank-2] = 0;
+			D[rank-2, rank-1] = 0;
+			return D
+		elif type == 'G':
+				if rank == 2:
+					G = A;
+					G[0, 1] = -3;
+					return G
+				else:
+					print('Error cartan! there is no such a type G algebra!')
+		elif type == 'B':
+			B = A;
+			B[rank-1, rank-2] = -2;
+			return B
+		elif type == 'C':
+			C = A;
+			C[rank-2, rank-1] = -2;
+			return C
+		elif type == 'F':
+			F = exc.cartanF4
+			return F
+		elif type == 'E':
+			if rank == 6:
+				E = exc.cartanE6
+				return E
+			elif rank == 7:
+				E = exc.cartanE6
+				return E
+			elif rank == 8:
+				E = exc.cartanE6
+				return E
+			else:
+				print('invalid rank for exceptional group E')
+			
+		else:
+			print('invalid Lie algebra type')
+					
+	
+def sign(n):
+	if n < 0:
+		return -1
+	else:
+		return 1
+
+
+def weyl(type, rank, weight, i):
+	return weight - np.dot(cartan(type, rank), stand(i, len(weight))) * np.dot(stand(i, len(weight)),weight)
+	
+
+def check(weight):
+	k = 1;
+	for i in range(len(weight)):
+		k = k * (sign(weight[i])+1);
+	if k == 0:
+		return False
+	else:
+		return True
+
+
+
+
+def positiveroots(algebra, rank):
+    temp = []
+    if algebra == 'A':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot+stand(j, rank)
+                temp.append(newroot)
+    elif algebra == 'C':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot + stand(j, rank)
+                temp.append(newroot)
+                if i == rank- k:
+                	newroot2 = 0
+                	for l in range(k):
+                		newroot2 = newroot2 + stand(rank-l, rank)
+                		temp.append(newroot + newroot2)                               
+    elif algebra == 'B':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot + stand(j, rank)
+                temp.append(newroot)
+                if i == rank- k:
+                	newroot2 = 0
+                	for l in range(k):
+                		newroot2 = newroot2 + stand(rank-l-1, rank)
+                		temp.append(newroot + newroot2)
+    elif algebra == 'D':
+        for t in range (1, rank+1):
+            temp.append(stand(t, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot+stand(j, rank)
+                    if j == rank:
+                    	if k != 1:
+                    		temp.append(newroot)
+                    		newroot2 = newroot
+                    		for r in range(1, k-1):
+                    			newroot2 = newroot2 + stand(rank-1-r, rank)
+                    			temp.append(newroot2)
+                    	newroot = newroot - stand(rank-1, rank) + stand(i-1, rank)
+                temp.append(newroot)
+        temp.pop(len(temp)-1)
+    elif algebra == 'E':
+    	if rank == 6:
+    		temp = exc.positiveE6
+    	elif rank == 7:
+    		temp = exc.positiveE7
+    	elif rank == 8:
+    		temp = exc.positiveE8
+    elif algebra == 'F':
+    	temp = exc.positiveF4
+    elif algebra == 'G':
+    	temp = exc.positiveG2
+    return temp
+
+def dimension(algebra, weight):
+	temp = 1
+	rank = len(weight)
+	weight = np.array(weight)
+	thesum = np.array(rho(rank))
+	pr = positiveroots(algebra, rank)
+	l = len(positiveroots(algebra, rank))
+	for i in range(l):
+		temp = temp * np.dot(weight + thesum, pr[i])
+		temp = temp/(np.dot(thesum, pr[i]))
+	return int(temp)
+	
+
+
+
+def coh(algebra, weight):
+	degree = 0;
+	for i in range(len(weight)):
+		weight[i] = weight[i] + 1
+	while check(weight) == False:
+		for i in range(len(weight)):
+			if weight[i] < 0:
+				weight = weyl(algebra, len(weight),weight, i+1);
+				degree = degree + 1
+	for i in range(len(weight)):
+		weight[i] = weight[i] - 1
+	if check(weight) == True:
+		return [dimension(algebra, weight), degree]
+	else:
+		return 'acyclic'
+		
+
+def hypcoh(algebra, weight, nodes):
+	w2 = emptylist(len(weight))
+	n2 = w2
+	for i in range(len(nodes)):
+		n2[nodes[i]-1] = 1
+	for i in range(len(weight)):
+		w2[i] = weight[i] - n2[i]
+	return(coh(algebra, weight), coh(algebra, w2))
+	
+
+
+
+#finish this by defining lr
+def tensor(algebra, w1, w2, nodes):
+	if len(w1) != len(w2):
+		print('error: invalid weights')
+	else:
+		result = emptylist(len(w1))
+		for i in range(len(nodes)):
+			for j in range(nodes[i], nodes[i+1]):
+				result[j+i] = lr(trim(w1, nodes[i], nodes[i+1]), trim(w2, nodes[i], nodes[i+1]))[j]
+		return result
+
+
+
