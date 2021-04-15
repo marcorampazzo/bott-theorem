@@ -1,5 +1,6 @@
 # bott-theorem
-A Python script to comnpute cohomology of irreducible homogeneous vector bundles on rational homogeneous varieties.
+A Python script to compute cohomology of irreducible homogeneous vector bundles on rational homogeneous varieties.
+
 
 The content of this project is essentially the function coh, all the rest is preparatory to it. 
 
