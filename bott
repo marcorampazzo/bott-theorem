@@ -3,16 +3,16 @@ import math
 import exceptional as exc
 
 def emptylist(length):
-	e = [];
+        e = [];
 	for i in range(length):
 		e.append(0)
 	return e
 
 def rho(length):
         e = [];
-	for i in range(length):
-	        e.append(1)
-        return e
+        for i in range(length):
+		e.append(1)
+	return e
 
 
 
@@ -112,74 +112,74 @@ def check(weight):
 
 
 def positiveroots(algebra, rank):
-		temp = []
-    if algebra == 'A':
-        for i in range (1, rank+1):
-            temp.append(stand(i, rank))
-        for k in range(1, rank):
-            for i in range(1, rank - k + 1):
-                newroot = 0
-                for j in range(i, i + k + 1):
-                    newroot = newroot+stand(j, rank)
-                temp.append(newroot)
-    elif algebra == 'C':
-        for i in range (1, rank+1):
-            temp.append(stand(i, rank))
-        for k in range(1, rank):
-            for i in range(1, rank - k + 1):
-                newroot = 0
-                for j in range(i, i + k + 1):
-                    newroot = newroot + stand(j, rank)
-                temp.append(newroot)
-                if i == rank- k:
-                	newroot2 = 0
-                	for l in range(k):
-                		newroot2 = newroot2 + stand(rank-l, rank)
-                		temp.append(newroot + newroot2)                               
-    elif algebra == 'B':
-        for i in range (1, rank+1):
-            temp.append(stand(i, rank))
-        for k in range(1, rank):
-            for i in range(1, rank - k + 1):
-                newroot = 0
-                for j in range(i, i + k + 1):
-                    newroot = newroot + stand(j, rank)
-                temp.append(newroot)
-                if i == rank- k:
-                	newroot2 = 0
-                	for l in range(k):
-                		newroot2 = newroot2 + stand(rank-l-1, rank)
-                		temp.append(newroot + newroot2)
-    elif algebra == 'D':
-        for t in range (1, rank+1):
-            temp.append(stand(t, rank))
-        for k in range(1, rank):
-            for i in range(1, rank - k + 1):
-                newroot = 0
-                for j in range(i, i + k + 1):
-                    newroot = newroot+stand(j, rank)
-                    if j == rank:
-                    	if k != 1:
-                    		temp.append(newroot)
-                    		newroot2 = newroot
-                    		for r in range(1, k-1):
-                    			newroot2 = newroot2 + stand(rank-1-r, rank)
-                    			temp.append(newroot2)
-                    	newroot = newroot - stand(rank-1, rank) + stand(i-1, rank)
-                temp.append(newroot)
-        temp.pop(len(temp)-1)
-    elif algebra == 'E':
-    	if rank == 6:
-    		temp = exc.positiveE6
-    	elif rank == 7:
-    		temp = exc.positiveE7
-    	elif rank == 8:
-    		temp = exc.positiveE8
-    elif algebra == 'F':
-    	temp = exc.positiveF4
-    elif algebra == 'G':
-    	temp = exc.positiveG2
-    return temp
+	temp = []
+	if algebra == 'A':
+		for i in range (1, rank+1):
+			temp.append(stand(i, rank))
+		for k in range(1, rank):
+			for i in range(1, rank - k + 1):
+				newroot = 0
+				for j in range(i, i + k + 1):
+					newroot = newroot+stand(j, rank)
+				temp.append(newroot)
+	elif algebra == 'C':
+		for i in range (1, rank+1):
+			temp.append(stand(i, rank))
+		for k in range(1, rank):
+			for i in range(1, rank - k + 1):
+				newroot = 0
+				for j in range(i, i + k + 1):
+					newroot = newroot + stand(j, rank)
+				temp.append(newroot)
+				if i == rank- k:
+					newroot2 = 0
+					for l in range(k):
+						newroot2 = newroot2 + stand(rank-l, rank)
+						temp.append(newroot + newroot2)                               
+	elif algebra == 'B':
+		for i in range (1, rank+1):
+			temp.append(stand(i, rank))
+		for k in range(1, rank):
+			for i in range(1, rank - k + 1):
+				newroot = 0
+				for j in range(i, i + k + 1):
+					newroot = newroot + stand(j, rank)
+				temp.append(newroot)
+				if i == rank- k:
+					newroot2 = 0
+					for l in range(k):
+						newroot2 = newroot2 + stand(rank-l-1, rank)
+						temp.append(newroot + newroot2)
+	elif algebra == 'D':
+		for t in range (1, rank+1):
+			temp.append(stand(t, rank))
+		for k in range(1, rank):
+			for i in range(1, rank - k + 1):
+				newroot = 0
+				for j in range(i, i + k + 1):
+					newroot = newroot+stand(j, rank)
+					if j == rank:
+						if k != 1:
+							temp.append(newroot)
+							newroot2 = newroot
+							for r in range(1, k-1):
+								newroot2 = newroot2 + stand(rank-1-r, rank)
+								temp.append(newroot2)
+							newroot = newroot - stand(rank-1, rank) + stand(i-1, rank)
+						temp.append(newroot)
+		temp.pop(len(temp)-1)
+	elif algebra == 'E':
+		if rank == 6:
+			temp = exc.positiveE6
+		elif rank == 7:
+			temp = exc.positiveE7
+		elif rank == 8:
+			temp = exc.positiveE8
+	elif algebra == 'F':
+		temp = exc.positiveF4
+	elif algebra == 'G':
+		temp = exc.positiveG2
+	return temp
 
 def dimension(algebra, weight):
 	temp = 1
