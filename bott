@@ -9,8 +9,8 @@ def emptylist(length):
 	return e
 
 def rho(length):
-		e = [];
-		for i in range(length):
+        e = [];
+	for i in range(length):
 				e.append(1)
     return e
 
