@@ -2,7 +2,6 @@ import numpy as np
 import math
 import exceptional as exc
 
-
 def emptylist(length):
 	e = [];
 	for i in range(length):
