@@ -1,3 +1,6 @@
+#this file contains the positive weights and the Cartan matrices of exceptional groups
+
+
 positiveE6 = [[1,0,0,0,0,0]
 ,[0,1,0,0,0,0]
 ,[0,0,1,0,0,0]
@@ -295,5 +298,6 @@ cartanF4 = [
 	[0, -1, 2, -1],
 	[0, 0, -1, 2]
 ]
+
 
 
