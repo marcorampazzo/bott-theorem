@@ -10,9 +10,9 @@ def emptylist(length):
 	return e
 
 def rho(length):
-    e = [];
-    for i in range(length):
-        e.append(1)
+		e = [];
+		for i in range(length):
+				e.append(1)
     return e
 
 
@@ -113,7 +113,7 @@ def check(weight):
 
 
 def positiveroots(algebra, rank):
-    temp = []
+		temp = []
     if algebra == 'A':
         for i in range (1, rank+1):
             temp.append(stand(i, rank))
