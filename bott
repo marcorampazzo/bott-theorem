@@ -3,14 +3,14 @@ import math
 import exceptional as exc
 
 def emptylist(length):
-        e = [];
+	e = [];
 	for i in range(length):
 		e.append(0)
 	return e
 
 def rho(length):
-        e = [];
-        for i in range(length):
+	e = [];
+	for i in range(length):
 		e.append(1)
 	return e
 
