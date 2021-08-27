@@ -2,18 +2,29 @@ import numpy as np
 import math
 import exceptional as exc
 
+
 def emptylist(length):
 	e = [];
 	for i in range(length):
 		e.append(0)
 	return e
+	
+def vectsum(list1, list2):
+	temp = emptylist(len(list1))
+	for i in range(len(list1)):
+		temp[i] = temp[i]+list1[i]+list2[i]
+	return temp
+
+
+def dotprod(list1, list2):
+	return sum([i*j for (i, j) in zip(list1, list2)])
+
 
 def rho(length):
-	e = [];
-	for i in range(length):
-		e.append(1)
-	return e
-
+    e = [];
+    for i in range(length):
+        e.append(1)
+    return e
 
 
 def stand(k, n):
@@ -27,6 +38,13 @@ def stand(k, n):
 			else:
 				e.append(0)
 		return np.array(e)
+
+
+def trim(vector, min, max):
+	result = emptylist(max - min)
+	for i in range(max - min):
+		result[i] = vector[min + i]
+	return result
 
 
 def cartan(type, rank):
@@ -112,88 +130,86 @@ def check(weight):
 
 
 def positiveroots(algebra, rank):
-	temp = []
-	if algebra == 'A':
-		for i in range (1, rank+1):
-			temp.append(stand(i, rank))
-		for k in range(1, rank):
-			for i in range(1, rank - k + 1):
-				newroot = 0
-				for j in range(i, i + k + 1):
-					newroot = newroot+stand(j, rank)
-				temp.append(newroot)
-	elif algebra == 'C':
-		for i in range (1, rank+1):
-			temp.append(stand(i, rank))
-		for k in range(1, rank):
-			for i in range(1, rank - k + 1):
-				newroot = 0
-				for j in range(i, i + k + 1):
-					newroot = newroot + stand(j, rank)
-				temp.append(newroot)
-				if i == rank- k:
-					newroot2 = 0
-					for l in range(k):
-						newroot2 = newroot2 + stand(rank-l, rank)
-						temp.append(newroot + newroot2)                               
-	elif algebra == 'B':
-		for i in range (1, rank+1):
-			temp.append(stand(i, rank))
-		for k in range(1, rank):
-			for i in range(1, rank - k + 1):
-				newroot = 0
-				for j in range(i, i + k + 1):
-					newroot = newroot + stand(j, rank)
-				temp.append(newroot)
-				if i == rank- k:
-					newroot2 = 0
-					for l in range(k):
-						newroot2 = newroot2 + stand(rank-l-1, rank)
-						temp.append(newroot + newroot2)
-	elif algebra == 'D':
-		for t in range (1, rank+1):
-			temp.append(stand(t, rank))
-		for k in range(1, rank):
-			for i in range(1, rank - k + 1):
-				newroot = 0
-				for j in range(i, i + k + 1):
-					newroot = newroot+stand(j, rank)
-					if j == rank:
-						if k != 1:
-							temp.append(newroot)
-							newroot2 = newroot
-							for r in range(1, k-1):
-								newroot2 = newroot2 + stand(rank-1-r, rank)
-								temp.append(newroot2)
-							newroot = newroot - stand(rank-1, rank) + stand(i-1, rank)
-						temp.append(newroot)
-		temp.pop(len(temp)-1)
-	elif algebra == 'E':
-		if rank == 6:
-			temp = exc.positiveE6
-		elif rank == 7:
-			temp = exc.positiveE7
-		elif rank == 8:
-			temp = exc.positiveE8
-	elif algebra == 'F':
-		temp = exc.positiveF4
-	elif algebra == 'G':
-		temp = exc.positiveG2
-	return temp
+    temp = []
+    if algebra == 'A':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot+stand(j, rank)
+                temp.append(newroot)
+    elif algebra == 'C':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot + stand(j, rank)
+                temp.append(newroot)
+                if i == rank- k:
+                	newroot2 = 0
+                	for l in range(k):
+                		newroot2 = newroot2 + stand(rank-l, rank)
+                		temp.append(newroot + newroot2)                               
+    elif algebra == 'B':
+        for i in range (1, rank+1):
+            temp.append(stand(i, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot + stand(j, rank)
+                temp.append(newroot)
+                if i == rank- k:
+                	newroot2 = 0
+                	for l in range(k):
+                		newroot2 = newroot2 + stand(rank-l-1, rank)
+                		temp.append(newroot + newroot2)
+    elif algebra == 'D':
+        for t in range (1, rank+1):
+            temp.append(stand(t, rank))
+        for k in range(1, rank):
+            for i in range(1, rank - k + 1):
+                newroot = 0
+                for j in range(i, i + k + 1):
+                    newroot = newroot+stand(j, rank)
+                    if j == rank:
+                    	if k != 1:
+                    		temp.append(newroot)
+                    		newroot2 = newroot
+                    		for r in range(1, k-1):
+                    			newroot2 = newroot2 + stand(rank-1-r, rank)
+                    			temp.append(newroot2)
+                    	newroot = newroot - stand(rank-1, rank) + stand(i-1, rank)
+                temp.append(newroot)
+        temp.pop(len(temp)-1)
+    elif algebra == 'E':
+    	if rank == 6:
+    		temp = exc.positiveE6
+    	elif rank == 7:
+    		temp = exc.positiveE7
+    	elif rank == 8:
+    		temp = exc.positiveE8
+    elif algebra == 'F':
+    	temp = exc.positiveF4
+    elif algebra == 'G':
+    	temp = exc.positiveG2
+    return temp
 
 def dimension(algebra, weight):
-	temp = 1
+	temp1 = 1
+	temp2 = 1
 	rank = len(weight)
-	weight = np.array(weight)
-	thesum = np.array(rho(rank))
+	thesum = rho(rank)
 	pr = positiveroots(algebra, rank)
 	l = len(positiveroots(algebra, rank))
 	for i in range(l):
-		temp = temp * np.dot(weight + thesum, pr[i])
-		temp = temp/(np.dot(thesum, pr[i]))
-	return int(temp)
-	
-
+		temp1 = temp1 * dotprod(vectsum(weight,thesum), pr[i])
+		temp2 = temp2 * dotprod(thesum, pr[i])
+	return int(temp1/temp2)
 
 
 def coh(algebra, weight):
