@@ -1,3 +1,4 @@
+
 import numpy as np
 import math
 import exceptional as exc
@@ -77,7 +78,7 @@ def cartan(type, rank):
 					G[0, 1] = -3;
 					return G
 				else:
-					print('Error cartan! there is no such a type G algebra!')
+					print('invalid rank for exceptional group G')
 		elif type == 'B':
 			B = A;
 			B[rank-1, rank-2] = -2;
@@ -199,7 +200,7 @@ def positiveroots(algebra, rank):
     	temp = exc.positiveG2
     return temp
 
-def dimension(algebra, weight):
+def dimension_old(algebra, weight):
 	temp1 = 1
 	temp2 = 1
 	rank = len(weight)
@@ -210,6 +211,21 @@ def dimension(algebra, weight):
 		temp1 = temp1 * dotprod(vectsum(weight,thesum), pr[i])
 		temp2 = temp2 * dotprod(thesum, pr[i])
 	return int(temp1/temp2)
+
+
+def dimension(algebra, weight):
+	temp1 = 1
+	temp2 = 1
+	rank = len(weight)
+	thesum = rho(rank)
+	pr = positiveroots(algebra, rank)
+	l = len(positiveroots(algebra, rank))
+	for i in range(l):
+		temp1 = temp1 * int(dotprod(vectsum(weight,thesum), pr[i]))
+		temp2 = temp2 * int(dotprod(thesum, pr[i]))
+	return int(temp1/temp2)
+
+
 
 
 def coh(algebra, weight):
@@ -227,4 +243,7 @@ def coh(algebra, weight):
 		return [dimension(algebra, weight), degree]
 	else:
 		return 'acyclic'
+		
+		
+		
 		
